@@ -13,21 +13,20 @@ example config
 
     
     {
-      "_id": "visma-dom-orders-s",
-      "type": "system:microservice",
-      "docker": {
-        "environment": {
-          "API_BASE_PATH": "$ENV(visma-dom-base-path)",
-          "API_PATH": "distributedordermanager-test/stores/{id}/orders",
-          "HEADERS": {
-            "Ocp-Apim-Subscription-Key": "$ENV(visma-dom-api-key)"
-          },
-          "ID_ARR": "1210,1200,1500"
-        },
-        "image": "ohuenno/visma-dom",
-        "port": 5001
-      }
-    },{
+  "_id": "visma-dom",
+  "type": "system:microservice",
+  "docker": {
+    "environment": {
+      "API_BASE_PATH": "$ENV(avinor-visma-dom-api-url)",
+      "HEADERS": {
+        "Ocp-Apim-Subscription-Key": "$SECRET(avinor-visma-dom-api-key)"
+      },
+      "LOG_LEVEL": "DEBUG"
+    },
+    "image": "ohuenno/visma-dom",
+    "port": 5001
+  }
+ },{
       "_id": "visma-dom-orders",
       "type": "pipe",
       "source": {
