@@ -12,9 +12,11 @@ APP = Flask(__name__)
 
 LOG_LEVEL = os.environ.get('LOG_LEVEL', logging.DEBUG)
 
-API_PATH = os.environ.get('API_BASE_PATH', 'https://webappsapistage.azure-api.net/distributedordermanager-test/orders')
+API_PATH = os.environ.get('API_BASE_PATH')
 
-
+if not API_PATH:
+    logging.error("API_PATH required")
+    exit(1)
 
 # at least Ocp-Apim-Subscription-Key header with API access key must be provided
 HEADERS = json.loads(os.environ.get("HEADERS", '{}'))
@@ -38,7 +40,7 @@ def process(headers, req_args):
     first = True
     while True:
         since = req_args.get('since')
-        url = build_api_request_url(API_PATH, {'skip': offset, 'take': items_to_take},since)
+        url = build_api_request_url(API_PATH, {'skip': offset, 'take': items_to_take}, since)
         logging.debug("Send request to %s", url)
         response = requests.get(url, headers=headers)
         if response.status_code != 200:
@@ -65,7 +67,7 @@ def build_api_request_url(api_path, query_dict=None, since=None):
         payload = '?' + urlencode(query_dict)
 
     if since is not None:
-        payload += '&fromDate='+since
+        payload += '&fromDate=' + since
     return api_path + payload
 
 
