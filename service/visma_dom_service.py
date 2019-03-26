@@ -12,7 +12,7 @@ APP = Flask(__name__)
 
 LOG_LEVEL = os.environ.get('LOG_LEVEL', logging.DEBUG)
 
-API_PATH = os.environ.get('API_BASE_PATH', 'https://webappsapistage.azure-api.net/distributedordermanager-test/orders')
+API_PATH = os.environ.get('API_BASE_PATH')
 
 
 
