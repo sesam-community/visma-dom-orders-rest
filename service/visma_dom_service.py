@@ -3,8 +3,7 @@
 import os
 import logging
 import json
-from utils import str_to_bool
-from datetime import datetime
+from service.utils import str_to_bool, ts_to_date
 
 import requests
 
@@ -16,7 +15,7 @@ LOG_LEVEL = os.environ.get('LOG_LEVEL', "INFO")
 
 API_PATH = os.environ.get('API_BASE_PATH')
 
-CONVERT_TS_TO_DATE_STR = str_to_bool(os.environ.get('CONVERT_TS_TO_DATE_STR', 'false'))
+CONVERT_TS_TO_DATE_STR = str_to_bool(os.environ.get('CONVERT_TS_TO_DATE_STR', 'true'))
 
 if not API_PATH:
     logging.error("API_PATH required")
@@ -62,9 +61,21 @@ def process(headers, req_args):
         else:
             first = False
 
-        item["_updated"] = datetime.fromtimestamp(
-            item["orderChangedDate"]).astimezone().isoformat() if CONVERT_TS_TO_DATE_STR else item[
-            "orderChangedDate"]
+        if CONVERT_TS_TO_DATE_STR:
+            if item.get('orderChangedDate'):
+                item["_updated"] = ts_to_date(item["orderChangedDate"])
+            if item.get('collectEndTime'):
+                item['collectEndTime'] = ts_to_date(item["collectEndTime"])
+            if item.get('collectStartTime'):
+                item['collectStartTime'] = ts_to_date(item["collectStartTime"])
+            if item.get('orderChangedDate'):
+                item['orderChangedDate'] = ts_to_date(item["orderChangedDate"])
+            if item.get('orderCollectedDate'):
+                item['orderCollectedDate'] = ts_to_date(item["orderCollectedDate"])
+            if item.get('orderConfirmationDeadline'):
+                item['orderConfirmationDeadline'] = ts_to_date(item["orderConfirmationDeadline"])
+            if item.get('orderPlacedDate'):
+                item['orderPlacedDate'] = ts_to_date(item["orderPlacedDate"])
         yield json.dumps(item)
     yield "]"
 
