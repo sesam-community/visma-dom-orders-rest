@@ -3,7 +3,7 @@
 import os
 import logging
 import json
-from service.utils import str_to_bool, ts_to_date
+from utils import str_to_bool, ts_to_date
 
 import requests
 
