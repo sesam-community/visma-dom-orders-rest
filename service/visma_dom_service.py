@@ -76,6 +76,8 @@ def process(headers, req_args):
                 item['orderConfirmationDeadline'] = ts_to_date(item["orderConfirmationDeadline"])
             if item.get('orderPlacedDate'):
                 item['orderPlacedDate'] = ts_to_date(item["orderPlacedDate"])
+        else:
+            item["_updated"] = item["orderChangedDate"]
         yield json.dumps(item)
     yield "]"
 
