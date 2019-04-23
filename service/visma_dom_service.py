@@ -46,6 +46,9 @@ def process(headers, req_args):
     first = True
 
     since = req_args.get('since')
+    if since is None:
+        since = str(1500000000)
+
     url = build_api_request_url(API_PATH, since)
     logging.debug("Send request to %s", url)
     response = requests.get(url, headers=headers)
